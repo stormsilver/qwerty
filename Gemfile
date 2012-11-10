@@ -14,6 +14,8 @@ gem 'passphrase'
 gem 'state_machine'
 gem 'SyslogLogger'
 gem 'uuid'
+gem 'haml-rails'
+gem 'twilio-ruby'
 
 # only needed for compiling assets, these gems will not be installed in production
 group :assets do
