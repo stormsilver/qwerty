@@ -1,3 +1,5 @@
 class Round < ActiveRecord::Base
-  # attr_accessible :title, :body
+  belongs_to :game
+  has_many :scores
+  has_many :texts
 end
