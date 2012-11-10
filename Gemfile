@@ -12,7 +12,7 @@ gem 'jquery-rails'
 gem 'mysql2'
 gem 'passphrase'
 gem 'state_machine'
-gem 'SyslogLogger', :require => 'syslog_logger'
+gem 'SyslogLogger'
 gem 'uuid'
 
 # only needed for compiling assets, these gems will not be installed in production
