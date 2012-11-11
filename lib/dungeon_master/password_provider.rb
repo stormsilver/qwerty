@@ -21,22 +21,37 @@ module DungeonMaster
         initialize_round(@game.users.first, @game.users.last)
         @game.start
       else
+        handled = false
+        @text.round = @round
+        
         case @text.body
         when 'skip'
-          if @user == @round.data[:clue_giver] && @round.data[:points] == MAX_POINTS && @round.data[:skips] < 1
-            @round.data[:skips] += 1
-            @round.data[:password] = self.class.get_password
-            TwilioNumber.send_message("Fine. The new password is #{@round.data[:password]}. Give your clue. No more skips.", @round.data[:clue_giver])
+          # only allow one skip
+          if @round.active && @user == @round.data[:clue_giver] && @round.data[:points] == MAX_POINTS
+            if @round.data[:skips] < 1
+              @round.data[:skips] += 1
+              @round.data[:password] = self.class.get_password
+              TwilioNumber.send_message("Fine. The new password is #{@round.data[:password]}. Give your clue. No more skips.", @round.data[:clue_giver])
+            else
+              TwilioNumber.send_message("Only one skip, bro. Your password is still #{@round.data[:password]}.", @round.data[:clue_giver])
+            end
+            handled = true
           end
         when 'play'
-          @round.end
-          old_round = @round
-          @round = @game.rounds.create :kind => 'password'
-          initialize_round(old_round.data[:guesser], old_round.data[:clue_giver])
+          unless @round.active
+            old_round = @round
+            @round = @game.rounds.create :kind => 'password'
+            initialize_round(old_round.data[:guesser], old_round.data[:clue_giver])
+            handled = true
+          end
         when 'stop'
           @round.end
           @game.end
-        else
+          handled = true         
+        end
+        
+        
+        if !handled && @round.active
           # TODO: handle chat
           if @user == @round.data[:clue_giver]
             TwilioNumber.send_message("#{@user.nickname}'s clue is: #{@text.body}. Your turn to guess.")
@@ -54,10 +69,13 @@ module DungeonMaster
                 TwilioNumber.send_message("#{@user.nickname}'s guess is: #{@text.body}. Incorrect. Give another clue for #{points} points.", @round.data[:clue_giver])
               end
             end
-            @round.save
           end
         end
       end
+      
+      @text.save
+      @round.save
+      @game.save
     end
     
     def initialize_round(clue_giver, guesser)
