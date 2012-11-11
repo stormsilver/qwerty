@@ -64,6 +64,8 @@ class Game < ActiveRecord::Base
     save
     
     PushMaster.generate_and_push('average-time-game')
+    PushMaster.generate_and_push('current-games')
+    PushMaster.generate_and_push('current-players')
   end
 
   def self.get_least_used_number(user)
