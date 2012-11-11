@@ -67,7 +67,7 @@ class Text < ActiveRecord::Base
   end
 
   def first_word
-    return split_message.shift
+    return split_message.shift.strip.downcase
   end
 
   def second_word_on
