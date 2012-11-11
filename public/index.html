@@ -211,7 +211,7 @@ $(function() {
 			myCounterSMS.incrementTo(data.count);
 		},
 		updateAverageSMS: function(data) {
-			$("#sms-per-game").val(data.average).trigger("change");
+			$("#sms-per-game").val(round(data.average)).trigger("change");
 		},
 		updateAverageScore: function(data) {
 			$("#average-score-per-game").val(round(data.average)).trigger("change");
