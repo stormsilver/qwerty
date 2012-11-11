@@ -65,8 +65,8 @@ class PushMaster
     end,
     'leaderboard' => Proc.new do
       leaders = []
-      ActiveRecord::Base.connection.select("SELECT `users`.nickname, sum(`scores`.amount) AS score FROM `users` LEFT JOIN `scores` ON `scores`.user_id = `users`.id GROUP BY `scores`.user_id ORDER BY average_score DESC LIMIT 10").each do |leader|
-        leaders << {:nick => leader['nickname'], :score => leader['score'].to_f}
+      ActiveRecord::Base.connection.select("SELECT `users`.nickname, sum(`scores`.amount) AS average_score FROM `users` LEFT JOIN `scores` ON `scores`.user_id = `users`.id GROUP BY `scores`.user_id ORDER BY average_score DESC LIMIT 10").each do |leader|
+        leaders << {:nick => leader['nickname'], :score => leader['average_score'].to_f}
       end
       leaders
     end,
