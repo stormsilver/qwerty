@@ -1,16 +1,15 @@
-
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<?php echo $this->Html->charset(); ?>
+	<meta charset="utf-8" />
 	<title>
 		Text With Friends
 	</title>
 	
-	<link href="/css/flipcounter.css" type="text/css" />
-	<link href="/css/bootstrap.css" type="text/css" />
-	<link href="/css/bootstrap-responsive.css" type="text/css" />
-	<link href="/css/main.css" type="text/css" />
+	<link rel="stylesheet" href="/css/flipcounter.css" type="text/css" />
+	<link rel="stylesheet"  href="/css/bootstrap.css" type="text/css" />
+	<link rel="stylesheet"  href="/css/bootstrap-responsive.css" type="text/css" />
+	<link rel="stylesheet"  href="/css/main.css" type="text/css" />
 	
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 	<script src="http://js.pusher.com/1.12/pusher.min.js"></script>
@@ -153,7 +152,7 @@ $(function() {
 				var newItem = itemTemplate.clone();
 				newItem.find(".name").attr("nick", items[i].nick).text(items[i].nick);
 				newItem.find(".score").text(items[i].score);
-				newItem.find("img").attr("src", "http://qwerty.local/img/leader_avatar" + random + ".png");
+				newItem.find("img").attr("src", "/img/leader_avatar" + random + ".png");
 				board.isotope('insert', newItem);
 			}
 			
@@ -214,20 +213,19 @@ $(function() {
 			buildLeaderboard("kot", data);
 		},
 		updateCurrentPlayers: function(data) {
-		console.log("current players", data);
 			if (data.count > playermax) {
 				playermax = data.count;
 			}		
 			
 			var deg = parseInt((data.count / playermax) * 130) + 24;
-			
-			$('.meter.orange .needle').transition({
-			    duration: 2000,
-			    rotate: deg,
-			    easing: 'snap'
-			});
+            $('.meter.orange .needle').transition({
+                duration: 2000,
+                rotate: deg,
+                easing: 'snap'
+            });
 			
 			$("#current-players-count").text(data.count);
+            $('#current-players-record').text(data.record);
 		},
 		updateCurrentGames: function(data) {
 			if (data.count > gamemax) {
@@ -236,13 +234,14 @@ $(function() {
 			
 			var deg = parseInt((data.count / gamemax) * 130) + 24;
 			
-			$('.meter.red .needle').transition({
-			    duration: 2000,
-			    rotate: deg,
-			    easing: 'snap'
-			});
+            $('.meter.red .needle').transition({
+                duration: 2000,
+                rotate: deg,
+                easing: 'snap'
+            });
 			
 			$("#current-games-count").text(data.count);
+            $('#current-games-record').text(data.record);
 		}
 	};
 	
@@ -299,7 +298,7 @@ $(function() {
 	$(".dial").knob();
 	
 	$.ajax({
-		url: "http://qwerty.rednovalabs.net/statistics",
+		url: "/statistics",
 		type: "GET",
 		dataType: "jsonp",
 		success: function(data) {
@@ -309,6 +308,7 @@ $(function() {
 			page.updateAverageTimeRound(data["average-time-round"]);
 			page.updateAverageSMS(data["average-sms"]);
 			page.updateSMSCount(data["sms-count"]);
+			page.updateGamesCount(data["games-count"]);
 			page.updatePlayersCount(data["players-count"]);
 			page.updateAverageScore(data["average-score"]);
 			page.updateTopPlayers(data["leaderboard"]);
