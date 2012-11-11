@@ -48,6 +48,7 @@ module DungeonMaster
           end
         when 'play'
           unless @round.active
+            TwilioNumber.send_message("#{@user.nickname} has started a new game.", other_user, @game)
             old_round = @round
             @round = @game.rounds.create :kind => 'password'
             initialize_round(old_round.data[:guesser], old_round.data[:clue_giver])
@@ -76,8 +77,9 @@ module DungeonMaster
               elsif @user == @round.data[:guesser]
                 if password_matched?
                   log_scores
-                  TwilioNumber.send_message("#{@user.nickname}'s guess is: #{@text.body_original}. Correct! You each get #{@round.data[:points]} points. PLAY again, DONE, or keep texting to just chat.", @round.data[:clue_giver], @game)
-                  TwilioNumber.send_message("Correct! You each get #{@round.data[:points]} points. PLAY again, DONE, or keep texting to just chat.", @round.data[:guesser], @game)
+                  str = "#{@round.data[:points] == MAX_POINTS ? "Aced it" : "Correct"}!"
+                  TwilioNumber.send_message("#{@user.nickname}'s guess is: #{@text.body_original}. #{str} You each get #{@round.data[:points]} points. PLAY again, DONE, or keep texting to just chat.", @round.data[:clue_giver], @game)
+                  TwilioNumber.send_message("#{str} You each get #{@round.data[:points]} points. PLAY again, DONE, or keep texting to just chat.", @round.data[:guesser], @game)
                   @round.stop
                 else
                   @round.data[:points] -= 1
