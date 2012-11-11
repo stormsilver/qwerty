@@ -48,13 +48,9 @@ class Text < ActiveRecord::Base
   end
 
   def self.game_rx(from, to, body)
-    user = User.find_or_create(from)
+    user, is_new = User.find_or_create(from)
     game = Game.find_active(user, to)
-    sms = self.create(
-      :body => body,
-      :user => user,
-      :game => game
-    )
+    sms = self.create(:body => body, :user => user, :game => game)
 
     if game
       provider = DungeonMaster::Master.provider_for game, user, sms

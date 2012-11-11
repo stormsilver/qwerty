@@ -4,19 +4,19 @@ class User < ActiveRecord::Base
   has_many :texts
 
   def self.find_or_create(phone)
-  	user = where(:phone_number => phone).first
+    user = where(:phone_number => phone).first
     is_new = false
-  	unless user
-  		user = self.new(:phone_number => phone)
-  		user.nickname = self.generate_nickname
-  		user.area_code = phone[2,3].to_i
-  		user.save
+    unless user
+      user = self.new(:phone_number => phone)
+      user.nickname = self.generate_nickname
+      user.area_code = phone[2,3].to_i
+      user.save
 
       TwilioNumber.send_message("Welcome to QWERTY! #{ApplicationConfig[:main_menu]}", user)
       is_new = true
-  	end
+    end
 
-  	return user, is_new
+    return user, is_new
   end
 
   def self.generate_nickname
