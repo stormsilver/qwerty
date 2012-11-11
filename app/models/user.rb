@@ -12,7 +12,7 @@ class User < ActiveRecord::Base
   		user.area_code = phone[2,3].to_i
   		user.save
 
-      TwilioNumber.send_message("Welcome to QWERTY! #{ApplicationConfig[:main_menu]}")
+      TwilioNumber.send_message("Welcome to QWERTY! #{ApplicationConfig[:main_menu]}", user)
       is_new = true
   	end
 
