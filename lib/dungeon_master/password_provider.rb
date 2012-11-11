@@ -116,11 +116,11 @@ module DungeonMaster
         
       # pick a clue giver
       @round.data[:clue_giver] = clue_giver
-      TwilioNumber.send_message("The password is: #{@round.data[:password]}. Give your clue, 'skip' to get a new word, or 'end' to end.", @round.data[:clue_giver], @game)
+      TwilioNumber.send_message("The password is: #{@round.data[:password]}. Give your clue, 'skip' to get a new word, or 'done' to end.", @round.data[:clue_giver], @game)
         
       # other one is the guesser
       @round.data[:guesser] = guesser
-      TwilioNumber.send_message("You are guessing the password. #{@round.data[:clue_giver].nickname} is thinking of a clue. 'end' to end.", @round.data[:guesser], @game)
+      TwilioNumber.send_message("You are guessing the password. #{@round.data[:clue_giver].nickname} is thinking of a clue. 'done' to end.", @round.data[:guesser], @game)
       
       @round.start
     end
