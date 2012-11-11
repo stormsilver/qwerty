@@ -14,7 +14,7 @@ module DungeonMaster
     def run
       if @game.users.count < 2
         # waiting for more players
-        TwilioNumber.send_message("Waiting for another player to join.", user)
+        TwilioNumber.send_message("Waiting for another player to join.", user, @game)
         return
       end
       
@@ -27,6 +27,12 @@ module DungeonMaster
         handled = false
         @text.round = @round
         
+        if @user == @round.data[:clue_giver]
+          other_user = @round.data[:guesser]
+        else
+          other_user = @round.data[:clue_giver]
+        end
+        
         case @text.body
         when 'skip'
           # only allow one skip
@@ -34,9 +40,9 @@ module DungeonMaster
             if @round.data[:skips] < 1
               @round.data[:skips] += 1
               @round.data[:password] = self.class.get_password
-              TwilioNumber.send_message("Fine. The new password is #{@round.data[:password]}. Give your clue. No more skips.", @round.data[:clue_giver])
+              TwilioNumber.send_message("Fine. The new password is: #{@round.data[:password]}. Give your clue. No more skips.", @round.data[:clue_giver], @game)
             else
-              TwilioNumber.send_message("Only one skip, bro. Your password is still #{@round.data[:password]}.", @round.data[:clue_giver])
+              TwilioNumber.send_message("Only one skip, bro. Your password is still #{@round.data[:password]}.", @round.data[:clue_giver], @game)
             end
             handled = true
           end
@@ -48,29 +54,49 @@ module DungeonMaster
             handled = true
           end
         when 'end'
-          @round.end
-          @game.end
+          TwilioNumber.send_message("#{@user.nickname} has ended the game.", other_user, @game)
+          @round.stop
+          @game.stop
           handled = true         
         end
         
         
-        if !handled && @round.active
-          if @user == @round.data[:clue_giver]
-            TwilioNumber.send_message("#{@user.nickname}'s clue is: #{@text.body}. Your turn to guess for #{@round.data[:points]} points.", @round.data[:guesser])
-          elsif @user == @round.data[:guesser]
-            if @text.body == @round.data[:password]
-              @round.scores.create(:amount => @round.data[:points], :user => @round.data[:guesser])
-              @round.scores.create(:amount => @round.data[:points], :user => @round.data[:clue_giver])
-              TwilioNumber.send_message("#{@user.nickname}'s guess is: #{@text.body}. Correct! You each get #{@round.data[:points]} points.", @round.data[:clue_giver])
-              TwilioNumber.send_message("Correct! You each get #{@round.data[:points]} points. PLAY again, END, or keep texting to just chat.", @round.data[:guesser])
-              @round.end
+        if !handled
+          if @round.active
+            if @user != @round.data[:turn]
+              TwilioNumber.send_message("It's not your turn. Be patient.", @user, @game)
             else
-              @round.data[:points] -= 1
-              if @round.data[:points] < 1
-              else
-                TwilioNumber.send_message("#{@user.nickname}'s guess is: #{@text.body}. Incorrect. Give another clue for #{points} points.", @round.data[:clue_giver])
+              if @user == @round.data[:clue_giver]
+                if password_matched?
+                  TwilioNumber.send_message("That's the password, silly. Send a real clue this time.", @round.data[:clue_giver], @game)
+                else
+                  TwilioNumber.send_message("#{@user.nickname}'s clue is: #{@text.body}. Your turn to guess for #{@round.data[:points]} points.", @round.data[:guesser], @game)
+                  @round.data[:turn] = @round.data[:guesser]
+                end
+              elsif @user == @round.data[:guesser]
+                if password_matched?
+                  @round.scores.create(:amount => @round.data[:points], :user => @round.data[:guesser])
+                  @round.scores.create(:amount => @round.data[:points], :user => @round.data[:clue_giver])
+                  TwilioNumber.send_message("#{@user.nickname}'s guess is: #{@text.body}. Correct! You each get #{@round.data[:points]} points. PLAY again, END, or keep texting to just chat.", @round.data[:clue_giver], @game)
+                  TwilioNumber.send_message("Correct! You each get #{@round.data[:points]} points. PLAY again, END, or keep texting to just chat.", @round.data[:guesser], @game)
+                  @round.stop
+                else
+                  @round.data[:points] -= 1
+                  if @round.data[:points] < 1
+                    # round over
+                    TwilioNumber.send_message("QWERTY wins! Your partner was unable to guess the password. 0 points. PLAY again, END, or keep texting to just chat.", @round.data[:clue_giver], @game)
+                    TwilioNumber.send_message("QWERTY wins! Your partner was unable to give you the password. 0 points. PLAY again, END, or keep texting to just chat.", @round.data[:guesser], @game)
+                    @round.stop
+                  else
+                    TwilioNumber.send_message("#{@user.nickname}'s guess is: #{@text.body}. Incorrect. Give another clue for #{@round.data[:points]} points.", @round.data[:clue_giver], @game)
+                    @round.data[:turn] = @round.data[:clue_giver]
+                  end
+                end
               end
             end
+          else
+            # just chatting
+            TwilioNumber.send_message("#{@user.nickname}: #{@text.body}", other_user, @game)
           end
         end
       end
@@ -86,16 +112,21 @@ module DungeonMaster
       @round.data[:password] = self.class.get_password
       @round.data[:points] = MAX_POINTS
       @round.data[:skips] = 0
+      @round.data[:turn] = clue_giver
         
       # pick a clue giver
       @round.data[:clue_giver] = clue_giver
-      TwilioNumber.send_message("The password is: #{@round.data[:password]}. Give your clue, 'skip' to get a new word, or 'end' to end.", @round.data[:clue_giver])
+      TwilioNumber.send_message("The password is: #{@round.data[:password]}. Give your clue, 'skip' to get a new word, or 'end' to end.", @round.data[:clue_giver], @game)
         
       # other one is the guesser
       @round.data[:guesser] = guesser
-      TwilioNumber.send_message("You are guessing the password. #{@round.data[:clue_giver].nickname} is thinking of a clue. 'end' to end.", @round.data[:guesser])
+      TwilioNumber.send_message("You are guessing the password. #{@round.data[:clue_giver].nickname} is thinking of a clue. 'end' to end.", @round.data[:guesser], @game)
       
       @round.start
+    end
+    
+    def password_matched?
+      @text.body == @round.data[:password]
     end
   end
 end

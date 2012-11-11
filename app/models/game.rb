@@ -1,11 +1,11 @@
 class Game < ActiveRecord::Base
   has_and_belongs_to_many :users
-  has_many :rounds
+  has_many :rounds, :order => 'updated_at DESC'
   accepts_nested_attributes_for :rounds, :reject_if => proc { |attrs| attrs['kind'].blank? }
   has_many :texts
   
   def active_round
-    rounds.where(:active => true).first
+    rounds.where(:active => true).first || rounds.first
   end
   
   def self.find_active(user, phone)

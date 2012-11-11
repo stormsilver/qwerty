@@ -6,13 +6,16 @@ class TwilioNumber < ActiveRecord::Base
     elsif game
       phone = game.phone_number
     end
-    Rails.logger.ap("****** Sending Twilio message to #{user.nickname} (#{user.phone_number}), from (#{phone}): #{message}")
-    if Rails.env == "prodution" || user.phone_number == "+18162132421"
+    
+    truncated_message = message[0, 160]
+    Rails.logger.ap("****** Sending Twilio message to #{user.nickname} (#{user.phone_number}), from (#{phone}): #{truncated_message}")
+    
+    if Rails.env.production? || user.phone_number == "+18162132421"
       @twilio_client = Twilio::REST::Client.new ApplicationConfig[:twilio_account], ApplicationConfig[:twilio_token]
       @twilio_client.account.sms.messages.create(
         :from => phone,
         :to => user.phone_number,
-        :body => message[0, 160]
+        :body => truncated_message
       )
     end
   end
