@@ -353,9 +353,8 @@ $(function() {
 			},
 			getSortData : {
 				score : function( $elem ) {
-					var score = parseFloat($elem.find('.score').text(), 10);
-					score = round(score);
-					return score;
+					//console.log();
+					return parseInt($elem.find('.score').text(), 10 );
 				},
 				name : function ( $elem ) {
 					return $elem.find('.name').text();
