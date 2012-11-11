@@ -4,7 +4,7 @@ class User < ActiveRecord::Base
   has_many :texts
   
   after_create do
-    PushMaster.push('players-count', {:count => self.class.count})
+    PushMaster.generate_and_push('players-count')
   end
 
   def self.find_or_create(phone)

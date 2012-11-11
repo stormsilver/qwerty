@@ -9,7 +9,7 @@ class Text < ActiveRecord::Base
   end
   
   after_create do
-    PushMaster.push('sms-count', {:count => self.class.count})
+    PushMaster.generate_and_push('sms-count')
   end
 
   def self.main_rx(from, to, body)

@@ -129,8 +129,7 @@ module DungeonMaster
       @round.scores.create(:amount => @round.data[:points], :user => @round.data[:guesser])
       @round.scores.create(:amount => @round.data[:points], :user => @round.data[:clue_giver])
                   
-      avg = Score.connection.select_value("SELECT AVG(`amount`) FROM scores WHERE `user_id` IS NOT NULL AND `round_id` IS NOT NULL")
-      PushMaster.push('average-score', {:average => avg.to_f})
+      PushMaster.generate_and_push('average-score')
     end
     
     def password_matched?
