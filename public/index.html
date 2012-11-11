@@ -293,12 +293,12 @@ $(function() {
 		page.updateKingOfTheHill(data);
 	});
 	
-	var playermax = 100;
+	var playermax = 50;
 	channel.bind("current-players", function(data) {
 		page.updateCurrentPlayers(data);
 	});
 	
-	var gamemax = 100;
+	var gamemax = 25;
 	channel.bind("current-games", function(data) {
 		page.updateCurrentGames(data);
 	});
