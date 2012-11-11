@@ -1,10 +1,10 @@
 module DungeonMaster
   class Master
     def self.provider_for(game, user, text)
-      # find active round
-      round = game.active_round
-      unless round
+      if game.rounds.empty?
         round = game.rounds.create :kind => 'password'
+      else
+        round = game.active_round
       end
       "::DungeonMaster::#{round.kind.capitalize}Provider".constantize.new(game, round, user, text)
     end
