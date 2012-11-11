@@ -2,6 +2,10 @@ class User < ActiveRecord::Base
   has_and_belongs_to_many :games
   has_many :scores
   has_many :texts
+  
+  after_create do
+    PushMaster.push('players-count', {:count => self.class.count})
+  end
 
   def self.find_or_create(phone)
     user = where(:phone_number => phone).first

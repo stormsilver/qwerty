@@ -48,28 +48,31 @@ class Game < ActiveRecord::Base
     # TODO: pusher
     
     active_games = self.class.where(:active => true).all
-    stat = Stat.where(:key => :concurrent_active_games).first
-    stat = Stat.new(:key => :concurrent_active_games) unless stat
+    stat = Stat.where(:key => :max_concurrent_active_games).first
+    stat = Stat.new(:key => :max_concurrent_active_games) unless stat
     if (stat.value < active_games.length)
       stat.value = active_games.length
       stat.save
-      # TODO: pusher
     end
+    PushMaster.push('current-games', {:count => active_games.length, :record => stat.value})
     
     active_users = active_games.collect{|g|g.users}.flatten.uniq
-    stat = Stat.where(:key => :concurrent_active_users).first
-    stat = Stat.new(:key => :concurrent_active_users) unless stat
+    stat = Stat.where(:key => :max_concurrent_active_users).first
+    stat = Stat.new(:key => :max_concurrent_active_users) unless stat
     if (stat.value < active_users.length)
       stat.value = active_users.length
       stat.save
-      # TODO: pusher
     end
+    PushMaster.push('current-players', {:count => active_users.length, :record => stat.value})
   end
   
   def stop
     self.end_time = Time.now
     self.active = false
     save
+    
+    avg = connection.select_value("SELECT AVG(`end_time` - `start_time`) FROM games WHERE `start_time` IS NOT NULL AND `end_time` IS NOT NULL")
+    PushMaster.push('average-time-game', {:average => avg})
   end
 
   def self.get_least_used_number(user)

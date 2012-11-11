@@ -7,6 +7,10 @@ class Text < ActiveRecord::Base
     self.body_original = self.body.strip
     self.body = self.body_original.downcase
   end
+  
+  after_create do
+    PushMaster.push('sms-count', {:count => self.class.count})
+  end
 
   def self.main_rx(from, to, body)
     user, is_new = User.find_or_create(from)

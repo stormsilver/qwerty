@@ -53,7 +53,7 @@ module DungeonMaster
             initialize_round(old_round.data[:guesser], old_round.data[:clue_giver])
             handled = true
           end
-        when 'end'
+        when 'done'
           TwilioNumber.send_message("#{@user.nickname} has ended the game.", other_user, @game)
           @round.stop
           @game.stop
@@ -75,17 +75,17 @@ module DungeonMaster
                 end
               elsif @user == @round.data[:guesser]
                 if password_matched?
-                  @round.scores.create(:amount => @round.data[:points], :user => @round.data[:guesser])
-                  @round.scores.create(:amount => @round.data[:points], :user => @round.data[:clue_giver])
-                  TwilioNumber.send_message("#{@user.nickname}'s guess is: #{@text.body_original}. Correct! You each get #{@round.data[:points]} points. PLAY again, END, or keep texting to just chat.", @round.data[:clue_giver], @game)
-                  TwilioNumber.send_message("Correct! You each get #{@round.data[:points]} points. PLAY again, END, or keep texting to just chat.", @round.data[:guesser], @game)
+                  log_scores
+                  TwilioNumber.send_message("#{@user.nickname}'s guess is: #{@text.body_original}. Correct! You each get #{@round.data[:points]} points. PLAY again, DONE, or keep texting to just chat.", @round.data[:clue_giver], @game)
+                  TwilioNumber.send_message("Correct! You each get #{@round.data[:points]} points. PLAY again, DONE, or keep texting to just chat.", @round.data[:guesser], @game)
                   @round.stop
                 else
                   @round.data[:points] -= 1
                   if @round.data[:points] < 1
                     # round over
-                    TwilioNumber.send_message("QWERTY wins! Your partner was unable to guess the password. 0 points. PLAY again, END, or keep texting to just chat.", @round.data[:clue_giver], @game)
-                    TwilioNumber.send_message("QWERTY wins! Your partner was unable to give you the password. 0 points. PLAY again, END, or keep texting to just chat.", @round.data[:guesser], @game)
+                    log_scores
+                    TwilioNumber.send_message("QWERTY wins! Your partner was unable to guess the password. 0 points. PLAY again, DONE, or keep texting to just chat.", @round.data[:clue_giver], @game)
+                    TwilioNumber.send_message("QWERTY wins! Your partner was unable to give you the password. 0 points. PLAY again, DONE, or keep texting to just chat.", @round.data[:guesser], @game)
                     @round.stop
                   else
                     TwilioNumber.send_message("#{@user.nickname}'s guess is: #{@text.body_original}. Incorrect. Give another clue for #{@round.data[:points]} points.", @round.data[:clue_giver], @game)
@@ -123,6 +123,14 @@ module DungeonMaster
       TwilioNumber.send_message("You are guessing the password. #{@round.data[:clue_giver].nickname} is thinking of a clue. 'end' to end.", @round.data[:guesser], @game)
       
       @round.start
+    end
+    
+    def log_scores
+      @round.scores.create(:amount => @round.data[:points], :user => @round.data[:guesser])
+      @round.scores.create(:amount => @round.data[:points], :user => @round.data[:clue_giver])
+                  
+      avg = Score.connection.select_value("SELECT AVG(`amount`) FROM scores WHERE `user_id` IS NOT NULL AND `round_id` IS NOT NULL")
+      PushMaster.push('average-score', {:average => avg.to_f})
     end
     
     def password_matched?
