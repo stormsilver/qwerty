@@ -225,6 +225,7 @@ $(function() {
             });
 			
 			$("#current-players-count").text(data.count);
+            $('#current-players-record').text(data.record);
 		},
 		updateCurrentGames: function(data) {
 			if (data.count > gamemax) {
@@ -240,6 +241,7 @@ $(function() {
             });
 			
 			$("#current-games-count").text(data.count);
+            $('#current-games-record').text(data.record);
 		}
 	};
 	
@@ -306,6 +308,7 @@ $(function() {
 			page.updateAverageTimeRound(data["average-time-round"]);
 			page.updateAverageSMS(data["average-sms"]);
 			page.updateSMSCount(data["sms-count"]);
+			page.updateGamesCount(data["games-count"]);
 			page.updatePlayersCount(data["players-count"]);
 			page.updateAverageScore(data["average-score"]);
 			page.updateTopPlayers(data["leaderboard"]);

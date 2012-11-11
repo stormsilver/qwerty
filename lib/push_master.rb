@@ -57,6 +57,9 @@ class PushMaster
     'players-count' => Proc.new do
       {:count => User.count}
     end,
+    'games-count' => Proc.new do
+      {:count => Game.count}
+    end,
     'average-score' => Proc.new do
       {:average => Score.connection.select_value("SELECT AVG(`amount`) FROM scores WHERE `user_id` IS NOT NULL AND `round_id` IS NOT NULL").to_f}
     end,
