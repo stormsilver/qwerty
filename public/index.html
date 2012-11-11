@@ -201,7 +201,7 @@ $(function() {
 			$("#sms-per-game").val(data.average).trigger("change");
 		},
 		updateAverageScore: function(data) {
-			$("#average-score-per-game").val(data.average).trigger("change");
+			$("#average-score-per-game").val(round(data.average)).trigger("change");
 		},
 		updateAverageTimeRound: function(data) {
 			$("#average-time-per-round").val(data.average).trigger("change");
