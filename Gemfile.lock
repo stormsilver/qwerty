@@ -12,7 +12,6 @@ GEM
       Platform (>= 0.4.0)
       open4
     Platform (0.4.0)
-    SyslogLogger (2.0)
     actionmailer (3.2.8)
       actionpack (= 3.2.8)
       mail (~> 2.4.4)
@@ -161,7 +160,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  SyslogLogger
   application_config!
   awesome_print
   bcrypt-ruby (~> 3.0.0)
