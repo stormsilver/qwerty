@@ -191,6 +191,10 @@ $(function() {
 	var myCounterSMS = new flipCounter('flip-counter-sms', {value: 0, auto: false, pace: 30});
 	
 	$(".navbar").click(function() {
+	
+	myCounterGames.setPace(30);
+			myCounterPlayers.setPace(30);
+			myCounterSMS.setPace(30);
 		myCounterGames.incrementTo(10000);
 			myCounterPlayers.incrementTo(10000);
 			myCounterSMS.incrementTo(10000);
