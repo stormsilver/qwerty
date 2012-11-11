@@ -72,6 +72,18 @@ class Game < ActiveRecord::Base
       TwilioNumber.send_message("You are already in the maximum number of games.", user)
       return
     end
+    
+    free_numbers_sql = <<-SQL
+    select t.phone_number as t_phone, g.phone_number as g_phone
+        from twilio_numbers as t
+        left outer join games as g on t.phone_number = g.phone_number and g.active = 1
+        where g.phone_number is null
+SQL
+    free_numbers = connection.select(free_numbers_sql)
+    if free_numbers.any?
+      return free_numbers.first["t_phone"]
+    end
+    
     sql = <<-SQL
       SELECT `games`.*, count(*) AS cnt 
       FROM `games` 
