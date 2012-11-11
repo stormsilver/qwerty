@@ -19,14 +19,21 @@ class Game < ActiveRecord::Base
   def self.find_waiting_or_start(user)
     matches = where(:waiting_for_players => true).order('created_at DESC').all
     if matches.any?
-      users = matches.collect do |match|
-        match.users
-      end.flatten
-      if users.include? user
-        TwilioNumber.send_message("You are already waiting for a match.", user)
-        return
+      other_match = matches.find do |game|
+        !game.users.include? user
       end
-      match = matches.first
+      if other_match
+        match = other_match
+      else
+        users = matches.collect do |match|
+          match.users
+        end.flatten
+        if users.include? user
+          TwilioNumber.send_message("You are already waiting for a match.", user)
+          return
+        end
+        match = matches.first
+      end
     else
       best_number = self.get_least_used_number(user)
       unless best_number
