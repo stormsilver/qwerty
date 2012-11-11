@@ -20,7 +20,8 @@ module DungeonMaster
       
       if @round.data.empty?
         # new game
-        initialize_round(@game.users.first, @game.users.last)
+        users = @game.users
+        initialize_round(users[0], users[1])
         @game.start
         @text.round = @round
       else
