@@ -1,0 +1,248 @@
+      body {
+        padding-top: 40px;
+      }
+      .sidebar-nav {
+        padding: 9px 0;
+      }
+      
+      
+      .navbar-fixed-top {
+	      margin-bottom: 0;
+      }
+      
+      .hero-unit {
+	      border-top-left-radius: 0;
+	      border-top-right-radius: 0;
+	      padding: 15px;
+	      padding-bottom: 5px;
+	      margin-bottom: 11px;
+      }
+      
+      .hero-unit p {
+      clear:left;
+      }
+      
+      .hero-unit h1 {
+	      background: transparent;
+		color: #FF3C3C;
+		margin-bottom: 20px;
+		text-align: center;
+      }
+      
+      .hero-unit h1 span {
+	      background-color: #ccc;
+	      padding: 0 5px;
+      }
+      
+      .hero-unit .avatar1 {
+	      background: url('../img/number_avatar1.png') no-repeat;
+	      padding-left: 85px;
+	      padding-top: 20px;
+	      margin-left: 10px;
+      }
+      
+      .hero-unit .avatar2 {
+	      background: url('../img/number_avatar2.png') no-repeat;
+	      padding-left: 80px;
+	      padding-top: 20px;
+      }
+      
+      .hero-unit .avatar3 {
+	      background: url('../img/number_avatar3.png') no-repeat;
+	      padding-top: 20px;
+	      padding-left: 90px;
+	      width: 280px;
+      }
+      
+      h2 {
+	      background-color: transparent;
+	      font-size: 18px;
+	      color: #ff3c3c;
+	      margin-top: 0;
+      }
+      
+      .flip-counter ul.cd {
+	      height: 78px;
+	     overflow: hidden;
+      }
+      
+      input[type="text"] {
+	      box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.075);
+      }
+      
+      .averages > div {
+	      float: left;
+	      position: relative;
+      }
+      .averages > div:nth-of-type(even) {
+	      margin-left: 55px;
+      }
+      
+      .averages .icon {
+	      	width: 41px;
+			height: 50px;
+			position: absolute;
+			top: 18px;
+			left: 57px;
+      }
+      
+      .averages .icon-clock {
+      	background-image: url('../img/icon_clock.png');
+      }
+      
+      .averages .icon-chat {
+      	background-image: url('../img/icon_sms.png');
+      	top: 23px;
+      }
+      
+      .averages .icon-ribbon {
+      	background-image: url('../img/icon_medal.png');
+      }
+      
+      .averages > div p {
+      position: absolute;
+      top: 150px;
+      left: 50%;
+      width: 180px;
+      margin-left: -90px;
+      text-align: center;
+      color: #73a7ff;
+      font-weight: bold;
+      }
+      
+      
+      .leaderboard ul {
+	      list-style: none;
+	      margin: 0;
+	      padding: 0;
+      }
+      
+      .leaderboard ul li {
+      	margin: 0;
+      	padding: 7px 5px;
+      	height: 23px;
+      	border-bottom: 1px solid #ddd;
+      }
+      
+      .leaderboard ul li span.name {
+      	float: left;
+      	width: 180px;
+      	border-right: 1px dotted #666;
+      	padding-top: 3px;
+      	padding-left: 5px;
+      }
+      
+      .leaderboard ul li img {
+      	float: left;
+      }
+      
+      .leaderboard ul li span:last-child {
+      	float: left;
+      	width: 40px;
+      	text-align: center;
+      	padding-top: 3px;
+      	padding-left: 4px;
+      }
+      
+      #footer {
+	      background: #fff7d6 url('../img/footer_shadow.png') repeat-x;
+	      height: 130px;
+	      position: relative;
+      }
+      
+      .meter {
+      	width: 154px;
+      	height: 100px;
+      	position: absolute;
+      	overflow: hidden;
+      }
+      
+      .meter.orange {
+      	background-image: url('../img/meter_color_orange.png');
+      	top: 40px;
+      	left: 360px;
+      }
+      
+      .meter.red {
+      	background-image: url('../img/meter_color_red.png');
+      	top: 40px;
+      	left: 780px;
+      }
+      
+      .meter .needle {
+	      background: url('../img/meter_arrow.png') no-repeat;
+	      width: 154px;
+      	height: 154px;
+      	position: absolute;
+      	z-index: 4;
+      	-webkit-transform: rotate(24deg);
+      }
+      .meter .overlay {
+	      background: url('../img/meter_cover.png') no-repeat;
+	      width: 154px;
+      	height: 154px;
+      	position: absolute;
+      	z-index: 5;
+      }
+      
+      #current-players {
+	      position: absolute;
+	      left: 530px;
+	      top: 67px;
+      }
+      
+      #current-games {
+	      position: absolute;
+	      left: 950px;
+	      top: 67px;
+      }
+	  
+	  /**** Isotope Filtering ****/
+
+.isotope-item {
+  z-index: 2;
+}
+
+.isotope-hidden.isotope-item {
+  pointer-events: none;
+  z-index: 1;
+}
+
+/**** Isotope CSS3 transitions ****/
+
+.isotope,
+.isotope .isotope-item {
+  -webkit-transition-duration: 0.8s;
+     -moz-transition-duration: 0.8s;
+      -ms-transition-duration: 0.8s;
+       -o-transition-duration: 0.8s;
+          transition-duration: 0.8s;
+}
+
+.isotope {
+  -webkit-transition-property: height, width;
+     -moz-transition-property: height, width;
+      -ms-transition-property: height, width;
+       -o-transition-property: height, width;
+          transition-property: height, width;
+}
+
+.isotope .isotope-item {
+  -webkit-transition-property: -webkit-transform, opacity;
+     -moz-transition-property:    -moz-transform, opacity;
+      -ms-transition-property:     -ms-transform, opacity;
+       -o-transition-property:      -o-transform, opacity;
+          transition-property:         transform, opacity;
+}
+
+/**** disabling Isotope CSS3 transitions ****/
+
+.isotope.no-transition,
+.isotope.no-transition .isotope-item,
+.isotope .isotope-item.no-transition {
+  -webkit-transition-duration: 0s;
+     -moz-transition-duration: 0s;
+      -ms-transition-duration: 0s;
+       -o-transition-duration: 0s;
+          transition-duration: 0s;
+}

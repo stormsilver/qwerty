@@ -1,0 +1,15 @@
+#needle {
+	background: #ccc;
+width: 325px;
+height: 325px;
+position: relative;
+}
+#needle span {
+	background: url('../img/bg-needle.png') no-repeat;
+	display: block;
+	height: 330px;
+	width: 24px;
+	position:absolute;
+	left: 50%;
+	margin-left: -12px;
+}

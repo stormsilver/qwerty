@@ -1,241 +1,354 @@
+
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Ruby on Rails: Welcome aboard</title>
-    <style type="text/css" media="screen">
-      body {
-        margin: 0;
-        margin-bottom: 25px;
-        padding: 0;
-        background-color: #f0f0f0;
-        font-family: "Lucida Grande", "Bitstream Vera Sans", "Verdana";
-        font-size: 13px;
-        color: #333;
-      }
-
-      h1 {
-        font-size: 28px;
-        color: #000;
-      }
-
-      a  {color: #03c}
-      a:hover {
-        background-color: #03c;
-        color: white;
-        text-decoration: none;
-      }
-
-
-      #page {
-        background-color: #f0f0f0;
-        width: 750px;
-        margin: 0;
-        margin-left: auto;
-        margin-right: auto;
-      }
-
-      #content {
-        float: left;
-        background-color: white;
-        border: 3px solid #aaa;
-        border-top: none;
-        padding: 25px;
-        width: 500px;
-      }
-
-      #sidebar {
-        float: right;
-        width: 175px;
-      }
-
-      #footer {
-        clear: both;
-      }
-
-      #header, #about, #getting-started {
-        padding-left: 75px;
-        padding-right: 30px;
-      }
-
-
-      #header {
-        background-image: url("assets/rails.png");
-        background-repeat: no-repeat;
-        background-position: top left;
-        height: 64px;
-      }
-      #header h1, #header h2 {margin: 0}
-      #header h2 {
-        color: #888;
-        font-weight: normal;
-        font-size: 16px;
-      }
-
-
-      #about h3 {
-        margin: 0;
-        margin-bottom: 10px;
-        font-size: 14px;
-      }
-
-      #about-content {
-        background-color: #ffd;
-        border: 1px solid #fc0;
-        margin-left: -55px;
-        margin-right: -10px;
-      }
-      #about-content table {
-        margin-top: 10px;
-        margin-bottom: 10px;
-        font-size: 11px;
-        border-collapse: collapse;
-      }
-      #about-content td {
-        padding: 10px;
-        padding-top: 3px;
-        padding-bottom: 3px;
-      }
-      #about-content td.name  {color: #555}
-      #about-content td.value {color: #000}
-
-      #about-content ul {
-        padding: 0;
-        list-style-type: none;
-      }
-
-      #about-content.failure {
-        background-color: #fcc;
-        border: 1px solid #f00;
-      }
-      #about-content.failure p {
-        margin: 0;
-        padding: 10px;
-      }
-
-
-      #getting-started {
-        border-top: 1px solid #ccc;
-        margin-top: 25px;
-        padding-top: 15px;
-      }
-      #getting-started h1 {
-        margin: 0;
-        font-size: 20px;
-      }
-      #getting-started h2 {
-        margin: 0;
-        font-size: 14px;
-        font-weight: normal;
-        color: #333;
-        margin-bottom: 25px;
-      }
-      #getting-started ol {
-        margin-left: 0;
-        padding-left: 0;
-      }
-      #getting-started li {
-        font-size: 18px;
-        color: #888;
-        margin-bottom: 25px;
-      }
-      #getting-started li h2 {
-        margin: 0;
-        font-weight: normal;
-        font-size: 18px;
-        color: #333;
-      }
-      #getting-started li p {
-        color: #555;
-        font-size: 13px;
-      }
-
-
-      #sidebar ul {
-        margin-left: 0;
-        padding-left: 0;
-      }
-      #sidebar ul h3 {
-        margin-top: 25px;
-        font-size: 16px;
-        padding-bottom: 10px;
-        border-bottom: 1px solid #ccc;
-      }
-      #sidebar li {
-        list-style-type: none;
-      }
-      #sidebar ul.links li {
-        margin-bottom: 5px;
-      }
-
-      .filename {
-        font-style: italic;
-      }
-    </style>
-    <script type="text/javascript">
-      function about() {
-        info = document.getElementById('about-content');
-        if (window.XMLHttpRequest)
-          { xhr = new XMLHttpRequest(); }
-        else
-          { xhr = new ActiveXObject("Microsoft.XMLHTTP"); }
-        xhr.open("GET","rails/info/properties",false);
-        xhr.send("");
-        info.innerHTML = xhr.responseText;
-        info.style.display = 'block'
-      }
-    </script>
-  </head>
-  <body>
-    <div id="page">
-      <div id="sidebar">
-        <ul id="sidebar-items">
-          <li>
-            <h3>Browse the documentation</h3>
-            <ul class="links">
-              <li><a href="http://guides.rubyonrails.org/">Rails Guides</a></li>
-              <li><a href="http://api.rubyonrails.org/">Rails API</a></li>
-              <li><a href="http://www.ruby-doc.org/core/">Ruby core</a></li>
-              <li><a href="http://www.ruby-doc.org/stdlib/">Ruby standard library</a></li>
-            </ul>
-          </li>
-        </ul>
-      </div>
-
-      <div id="content">
-        <div id="header">
-          <h1>Welcome aboard</h1>
-          <h2>You&rsquo;re riding Ruby on Rails!</h2>
-        </div>
-
-        <div id="about">
-          <h3><a href="rails/info/properties" onclick="about(); return false">About your application&rsquo;s environment</a></h3>
-          <div id="about-content" style="display: none"></div>
-        </div>
-
-        <div id="getting-started">
-          <h1>Getting started</h1>
-          <h2>Here&rsquo;s how to get rolling:</h2>
-
-          <ol>
-            <li>
-              <h2>Use <code>rails generate</code> to create your models and controllers</h2>
-              <p>To see all available options, run it without parameters.</p>
-            </li>
-
-            <li>
-              <h2>Set up a default route and remove <span class="filename">public/index.html</span></h2>
-              <p>Routes are set up in <span class="filename">config/routes.rb</span>.</p>
-            </li>
-
-            <li>
-              <h2>Create your database</h2>
-              <p>Run <code>rake db:create</code> to create your database. If you're not using SQLite (the default), edit <span class="filename">config/database.yml</span> with your username and password.</p>
-            </li>
-          </ol>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<?php echo $this->Html->charset(); ?>
+	<title>
+		Text With Friends
+	</title>
+	
+	<link href="/css/flipcounter.css" type="text/css" />
+	<link href="/css/bootstrap.css" type="text/css" />
+	<link href="/css/bootstrap-responsive.css" type="text/css" />
+	<link href="/css/main.css" type="text/css" />
+	
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="http://js.pusher.com/1.12/pusher.min.js"></script>
+	<script src="/js/jquery.knob.js"></script>
+	<script src="/js/jquery.transit.js"></script>
+	<script src="/js/jquery.flipcounter.js"></script>
+	<script src="/js/jquery.isotope.min.js"></script>
+	<script src="/js/bootstrap.js"></script>
+</head>
+<body>
+	<div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="#" style="color: #eee;">Text with Friends</a>
+          <div class="nav-collapse collapse">
+          </div><!--/.nav-collapse -->
         </div>
       </div>
-
-      <div id="footer">&nbsp;</div>
     </div>
-  </body>
+
+	<div class="container">
+		
+		<!-- Main hero unit for a primary marketing message or call to action -->
+<div class="hero-unit clearfix">
+	<h1>To Play send a text to <span>(816) 678-0040</span></h1>
+	<span class="span4 avatar1">
+		<div id="flip-counter-games" class="flip-counter"></div> <p>Total Number of Games</p>
+	</span>
+	<span class="span4 avatar2">
+		<div id="flip-counter-players" class="flip-counter"></div> <p>Total Number of Players</p>
+	</span>
+	<span class="span4 avatar3">
+		<div id="flip-counter-sms" class="flip-counter"></div> <p>Total Number of SMS</p>
+	</span>
+</div>
+
+<!-- Example row of columns -->
+<div class="row">
+	<div class="span5">
+	  <h2>Averages</h2>
+	  <div class="averages">
+	  	<div>
+	  		<input id="sms-per-game" type="text" value="0" class="dial" data-angleArc=250 data-angleOffset=-125 data-width="170"/>
+	  		<div class="icon icon-chat"></div>
+	  		<p>SMS Per Game</p>
+	  	</div>
+	  	<div>
+		  <input id="average-score-per-game" type="text" value="0" class="dial" data-angleArc=250 data-angleOffset=-125 data-width="170" data-max="5"/>
+		  <div class="icon icon-chat"></div>
+		  <p>Score Per Round</p>
+	  	</div>
+	  	<div>
+		  <input id="average-time-per-round" type="text" value="0" class="dial" data-angleArc=250 data-angleOffset=-125 data-width="170"/>
+		  <div class="icon icon-clock"></div>
+		  <p>Time Per Round</p>
+	  	</div>
+	  	<div>
+		  <input id="average-time-per-game" type="text" value="0" class="dial" data-angleArc=250 data-angleOffset=-125 data-width="170"/>
+		  <div class="icon icon-clock"></div>
+		  <p>Time Per Game</p>
+	  	</div>
+	  </div>
+	</div>
+	<div class="span3 leaderboard">
+	  <h2>Top Players</h2>
+	  <ul id="top10">
+	  </ul>
+	</div>
+	<div class="span3 leaderboard">
+	  <h2>Ace Masters</h2>
+	  <ul id="ace">
+	  </ul>
+	</div>
+	<div class="span3 leaderboard">
+	  <h2>King of the hill</h2>
+	  <ul id="kot">
+	  </ul>
+	</div>
+</div>
+    </div> 
+    
+    <div id="footer">
+	    <div class="meter orange">
+		    <div class="needle"></div>
+		    <div class="overlay"></div>
+	    </div>
+	    <div id="current-players">
+	    	<p style="position: relative;left: -8px; font-size: 16px; color: #888;">Current Players: <span id="current-players-count" style="color: #ffb54e; font-size: 18px;">0</span></p>
+	    	<p style="position: absolute;left: -7px; top: 18px; font-size: 12px; color: #aaa;">Lifetime Max - <span id="current-players-record">0</span> players</p>
+	    </div>
+	    <div class="meter red">
+		    <div class="needle"></div>
+		    <div class="overlay"></div>
+	    </div>
+	    <div id="current-games">
+	    	<p style="position: relative;left: -6px; font-size: 16px; color: #888;">Current Games: <span id="current-games-count" style="color: #ff515d; font-size: 18px;">0</span></p>
+	    	<p style="position: absolute;left: -6px; top: 17px; font-size: 12px; color: #aaa;">Lifetime Max - <span id="current-games-record">0</span> games</p>
+	    </div>
+    </div>
+<!-- /container -->
+
+    <!-- Le javascript
+    ================================================== -->
+<script>
+$(function() {
+	function getQueryString() {
+	  var result = {}, queryString = location.search.substring(1),
+	      re = /([^&=]+)=([^&]*)/g, m;
+	
+	  while (m = re.exec(queryString)) {
+	    result[decodeURIComponent(m[1])] = decodeURIComponent(m[2]);
+	  }
+	
+	  return result;
+	}
+	
+	window.buildLeaderboard = function(board, items) {
+		var board = $("#" + board),
+			itemTemplate = $('<li class="item"><img /><span class="name"></span><span class="score"></span></li>');
+			
+		for(var i = 0 ; i < items.length ; i++) {
+			//Check if user is already in list, if so, update their score
+			var existing = board.find("[nick='" + items[i].nick + "']").closest(".item");
+			
+			if (existing.length) {
+				existing.find(".score").text(items[i].score);
+				board.isotope('updateSortData', existing).isotope();
+			} else {
+				var min = 1;
+				var max = 20;
+				// and the formula is:
+				var random = Math.floor(Math.random() * (max - min + 1)) + min;
+			
+			
+				var newItem = itemTemplate.clone();
+				newItem.find(".name").attr("nick", items[i].nick).text(items[i].nick);
+				newItem.find(".score").text(items[i].score);
+				newItem.find("img").attr("src", "http://qwerty.local/img/leader_avatar" + random + ".png");
+				board.isotope('insert', newItem);
+			}
+			
+			board.isotope({ sortBy : "score" });
+			board.css("height", "350px");
+		}
+	}
+	
+	String.prototype.toHHMMSS = function () {
+	    sec_numb    = parseInt(this);
+	    var hours   = Math.floor(sec_numb / 3600);
+	    var minutes = Math.floor((sec_numb - (hours * 3600)) / 60);
+	    var seconds = sec_numb - (hours * 3600) - (minutes * 60);
+	
+	    if (hours   < 10) {hours   = "0"+hours;}
+	    if (minutes < 10) {minutes = "0"+minutes;}
+	    if (seconds < 10) {seconds = "0"+seconds;}
+	    var time    = hours+':'+minutes+':'+seconds;
+	    return time;
+	}
+	
+	var pusher = new Pusher('67c4cce54ab3421151c0');
+	var channel = pusher.subscribe('qwerty');
+	
+	var myCounterGames = new flipCounter('flip-counter-games', {value: 0, auto: false, pace: 30});
+	var myCounterPlayers = new flipCounter('flip-counter-players', {value: 0, auto: false, pace: 30});
+	var myCounterSMS = new flipCounter('flip-counter-sms', {value: 0, auto: false, pace: 30});
+	
+	var page = {
+		updateGamesCount: function(data) {
+			myCounterGames.incrementTo(data.count);
+		},
+		updatePlayersCount: function(data) {
+			myCounterPlayers.incrementTo(data.count);
+		},
+		updateSMSCount: function(data) {
+			myCounterSMS.incrementTo(data.count);
+		},
+		updateAverageSMS: function(data) {
+			$("#sms-per-game").val(data.average).trigger("change");
+		},
+		updateAverageScore: function(data) {
+			$("#average-score-per-game").val(data.average).trigger("change");
+		},
+		updateAverageTimeRound: function(data) {
+			$("#average-time-per-round").val((data.average + "").toHHMMSS()).trigger("change");
+		},
+		updateAverageTimeGame: function(data) {
+			$("#average-time-per-game").val(data.average).trigger("change");
+		},
+		updateTopPlayers: function(data) {
+			buildLeaderboard("top10", data);
+		},
+		updateAceMasters: function(data) {
+			buildLeaderboard("ace", data);
+		},
+		updateKingOfTheHill: function(data) {
+			buildLeaderboard("kot", data);
+		},
+		updateCurrentPlayers: function(data) {
+		console.log("current players", data);
+			if (data.count > playermax) {
+				playermax = data.count;
+			}		
+			
+			var deg = parseInt((data.count / playermax) * 130) + 24;
+			
+			$('.meter.orange .needle').transition({
+			    duration: 2000,
+			    rotate: deg,
+			    easing: 'snap'
+			});
+			
+			$("#current-players-count").text(data.count);
+		},
+		updateCurrentGames: function(data) {
+			if (data.count > gamemax) {
+				gamemax = data.count;
+			}		
+			
+			var deg = parseInt((data.count / gamemax) * 130) + 24;
+			
+			$('.meter.red .needle').transition({
+			    duration: 2000,
+			    rotate: deg,
+			    easing: 'snap'
+			});
+			
+			$("#current-games-count").text(data.count);
+		}
+	};
+	
+	channel.bind("games-count", function(data) {
+		page.updateGamesCount(data);
+	});
+	
+	channel.bind("players-count", function(data) {
+		page.updatePlayersCount(data);
+	});
+	
+	channel.bind("sms-count", function(data) {
+		page.updateSMSCount(data);
+	});
+	
+	channel.bind("average-sms", function(data) {
+		page.updateAverageSMS(data);
+	});
+	
+	channel.bind("average-score", function(data) {
+		page.updateAverageScore(data);
+	});
+	
+	channel.bind("average-time-round", function(data) {
+		page.updateAverageTimeRound(data);
+	});
+	
+	channel.bind("average-time-game", function(data) {
+		page.updateAverageTimeGame(data);
+	});
+	
+	channel.bind("leaderboard", function(data) {
+		page.updateTopPlayers(data);
+	});
+	
+	channel.bind("leaderboard-ace", function(data) {
+		page.updateAceMasters(data);
+	});
+	
+	channel.bind("leaderboard-king", function(data) {
+		page.updateKingOfTheHill(data);
+	});
+	
+	var playermax = 100;
+	channel.bind("current-players", function(data) {
+		page.updateCurrentPlayers(data);
+	});
+	
+	var gamemax = 100;
+	channel.bind("current-games", function(data) {
+		page.updateCurrentGames(data);
+	});
+	
+	$(".dial").knob();
+	
+	$.ajax({
+		url: "http://qwerty.rednovalabs.net/statistics",
+		type: "GET",
+		dataType: "jsonp",
+		success: function(data) {
+			page.updateCurrentGames(data["current-games"]);
+			page.updateCurrentPlayers(data["current-players"]);
+			page.updateAverageTimeGame(data["average-time-game"]);
+			page.updateAverageTimeRound(data["average-time-round"]);
+			page.updateAverageSMS(data["average-sms"]);
+			page.updateSMSCount(data["sms-count"]);
+			page.updatePlayersCount(data["players-count"]);
+			page.updateAverageScore(data["average-score"]);
+			page.updateTopPlayers(data["leaderboard"]);
+			page.updateAceMasters(data["leaderboard-ace"]);
+			page.updateKingOfTheHill(data["leaderboard-king"]);
+		}
+	});
+});
+
+		// different leaderboards
+		var $container = $('#top10');
+		
+		$container.add("#ace").add("#kot").isotope({
+			// options  
+			itemSelector : '.item',
+			sortAscending : false,
+			layoutMode: 'cellsByRow',
+			cellsByRow: {
+				columnWidth: 270,
+				rowHeight: 35
+			},
+			getSortData : {
+				score : function( $elem ) {
+					//console.log();
+					return parseInt( $elem.find('.score').text(), 10 );
+				},
+				name : function ( $elem ) {
+					return $elem.find('.name').text();
+				}
+			},
+			onLayout: function( $elems, instance ) {
+				if ($elems.length > 10) {
+				for (var i = 10 ; i < $elems.length ; i++)
+					if ($elems[i]) {
+						$($elems[i]).hide();
+					}
+				}
+			  }
+		});
+	</script>
+	
+</body>
 </html>
