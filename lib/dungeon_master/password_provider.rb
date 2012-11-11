@@ -128,8 +128,11 @@ module DungeonMaster
     def log_scores
       @round.scores.create(:amount => @round.data[:points], :user => @round.data[:guesser])
       @round.scores.create(:amount => @round.data[:points], :user => @round.data[:clue_giver])
-                  
+      
       PushMaster.generate_and_push('average-score')
+      PushMaster.generate_and_push('leaderboard')
+      PushMaster.generate_and_push('leaderboard-ace')
+      PushMaster.generate_and_push('leaderboard-king')
     end
     
     def password_matched?

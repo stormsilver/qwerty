@@ -59,6 +59,27 @@ class PushMaster
     end,
     'average-score' => Proc.new do
       {:average => Score.connection.select_value("SELECT AVG(`amount`) FROM scores WHERE `user_id` IS NOT NULL AND `round_id` IS NOT NULL").to_f}
+    end,
+    'leaderboard' => Proc.new do
+      leaders = []
+      ActiveRecord::Base.connection.select("SELECT `users`.nickname, AVG(`scores`.amount) AS average_score FROM `users` LEFT JOIN `scores` ON `scores`.user_id = `users`.id GROUP BY `scores`.user_id ORDER BY average_score DESC LIMIT 10").each do |leader|
+        leaders << {:nick => leader['nickname'], :score => leader['average_score'].to_f}
+      end
+      leaders
+    end,
+    'leaderboard-ace' => Proc.new do
+      aces = []
+      ActiveRecord::Base.connection.select("SELECT `users`.*, count(`scores`.amount) AS number_of_scores FROM `users` LEFT JOIN `scores` ON `scores`.user_id = `users`.id WHERE `scores`.amount = #{DungeonMaster::PasswordProvider::MAX_POINTS} GROUP BY `scores`.user_id ORDER BY number_of_scores DESC LIMIT 10;").each do |leader|
+        aces << {:nick => leader['nickname'], :score => leader['average_score'].to_f}
+      end
+      aces
+    end,
+    'leaderboard-king' => Proc.new do
+      kings = []
+      ActiveRecord::Base.connection.select("SELECT `users`.nickname, AVG(`scores`.amount) AS average_score FROM `users` LEFT JOIN `scores` ON `scores`.user_id = `users`.id GROUP BY `scores`.user_id ORDER BY average_score DESC LIMIT 10").each do |leader|
+        kings << {:nick => leader['nickname'], :score => leader['average_score'].to_f}
+      end
+      kings
     end
   }
   

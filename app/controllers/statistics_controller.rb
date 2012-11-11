@@ -4,6 +4,6 @@ class StatisticsController < ApplicationController
     PushMaster.statistics.each do |key, proc|
       data[key] = proc.call
     end
-    render :json => data
+    render :json => data, :callback => params[:callback]
   end
 end
