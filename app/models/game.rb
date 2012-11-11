@@ -4,8 +4,6 @@ class Game < ActiveRecord::Base
   accepts_nested_attributes_for :rounds, :reject_if => proc { |attrs| attrs['kind'].blank? }
   has_many :texts
   
-  serialize :data, Hash
-  
   def active_round
     rounds.where(:active => true).first
   end
