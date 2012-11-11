@@ -8,12 +8,20 @@ class Text < ActiveRecord::Base
   end
 
   def self.main_rx(from, to, body)
-    user = User.find_or_create(from)
+    user, is_new = User.find_or_create(from)
     sms = self.create(
       :body => body,
       :user => user
     )
-    case sms.body
+
+    tmp = body.split(" ")
+    first_word = tmp.shift
+    rest_of_message = tmp.join(" ")
+
+    Rails.logger.ap("First Word: #{first_word}")
+    Rails.logger.ap("Message: #{rest_of_message}");
+
+    case first_word.downcase
     when "start"
       game = Game.find_waiting_or_start(user)
       if game
@@ -21,13 +29,24 @@ class Text < ActiveRecord::Base
         provider.run
       end
     when "nick"
-      tmp = body.split(" ")
-      tmp.shift
-      user.nickname = tmp.join(" ")[0,16]
+      if not rest_of_message
+        TwilioNumber.send_message("You must specify name after the keyword NICK", user)
+        return
+      end
+      user.nickname = rest_of_message[0,16]
       user.save
-      TwilioNumber.send_message("You will now be known as #{user.nickname}", user)
+      TwilioNumber.send_message("You will now be known as: #{user.nickname}", user)
+    when "h"
+      TwilioNumber.send_message(ApplicationConfig[:main_menu], user)
+    when "score"
+      score = user.get_total_score
+      TwilioNumber.send_message("Your total score is: #{score.to_i} points", user)
+    when "rules"
+      TwilioNumber.send_message(ApplicationConfig[:rules], user)
     else
-      TwilioNumber.send_message("You do not have an active game for this number", user)
+      if !is_new
+        TwilioNumber.send_message("Unknown command. #{ApplicationConfig[:main_menu]}", user)
+      end
     end
   end
 

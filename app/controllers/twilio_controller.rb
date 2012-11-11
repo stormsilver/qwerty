@@ -5,6 +5,7 @@ class TwilioController < ApplicationController
   end
 
   def main_sms
+    Rails.logger.ap(params)
     Text.main_rx(params[:From], params[:To], params[:Body])
   end
 

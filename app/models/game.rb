@@ -11,7 +11,7 @@ class Game < ActiveRecord::Base
   def self.find_active(user, phone)
     match = where(:phone_number => phone, :active => true, :users => {:id => user}).joins(:users).first
     unless match
-      TwilioNumber.send_message("You do not have an active game for this number", user)
+      TwilioNumber.send_message("You do not have an active game for this number", user, nil, phone)
     end
     return match
   end

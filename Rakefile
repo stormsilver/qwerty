@@ -19,7 +19,7 @@ end
 
 task :main_rx => :environment do
   from = ENV['from']
-  to = "+1" + ApplicationConfig['twilio_main_phone']
+  to = ApplicationConfig['twilio_main_phone']
   body = ENV['body']
   if !from || !body
     ap "You need to specify 'from' and and 'body'"
