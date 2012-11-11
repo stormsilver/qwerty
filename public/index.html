@@ -181,12 +181,20 @@ $(function() {
 		return number / 100;
 	}
 	
+	
+	
 	var pusher = new Pusher('67c4cce54ab3421151c0');
 	var channel = pusher.subscribe('qwerty');
 	
 	var myCounterGames = new flipCounter('flip-counter-games', {value: 0, auto: false, pace: 30});
 	var myCounterPlayers = new flipCounter('flip-counter-players', {value: 0, auto: false, pace: 30});
 	var myCounterSMS = new flipCounter('flip-counter-sms', {value: 0, auto: false, pace: 30});
+	
+	$(".navbar").click(function() {
+		myCounterGames.incrementTo(10000);
+			myCounterPlayers.incrementTo(10000);
+			myCounterSMS.incrementTo(10000);
+	});
 	
 	var page = {
 		updateGamesCount: function(data) {
