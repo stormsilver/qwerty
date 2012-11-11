@@ -161,8 +161,8 @@ $(function() {
 		}
 	}
 	
-	String.prototype.toHHMMSS = function () {
-	    sec_numb    = parseInt(this);
+	function toHHMMSS(number) {
+	    sec_numb    = Math.round(number);
 	    var hours   = Math.floor(sec_numb / 3600);
 	    var minutes = Math.floor((sec_numb - (hours * 3600)) / 60);
 	    var seconds = sec_numb - (hours * 3600) - (minutes * 60);
@@ -172,6 +172,12 @@ $(function() {
 	    if (seconds < 10) {seconds = "0"+seconds;}
 	    var time    = hours+':'+minutes+':'+seconds;
 	    return time;
+	}
+	
+	function round(number) {
+		number = number * 100;
+		number = Math.round(number);
+		return number / 100;
 	}
 	
 	var pusher = new Pusher('67c4cce54ab3421151c0');
@@ -198,10 +204,12 @@ $(function() {
 			$("#average-score-per-game").val(data.average).trigger("change");
 		},
 		updateAverageTimeRound: function(data) {
-			$("#average-time-per-round").val((data.average + "").toHHMMSS()).trigger("change");
+			$("#average-time-per-round").val(data.average).trigger("change");
+			$("#average-time-per-round").val(toHHMMSS(data.average)).css("font-size", "21px");
 		},
 		updateAverageTimeGame: function(data) {
 			$("#average-time-per-game").val(data.average).trigger("change");
+			$("#average-time-per-game").val(toHHMMSS(data.average)).css("font-size", "21px");
 		},
 		updateTopPlayers: function(data) {
 			buildLeaderboard("top10", data);
