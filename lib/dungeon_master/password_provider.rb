@@ -52,7 +52,6 @@ module DungeonMaster
         
         
         if !handled && @round.active
-          # TODO: handle chat
           if @user == @round.data[:clue_giver]
             TwilioNumber.send_message("#{@user.nickname}'s clue is: #{@text.body}. Your turn to guess.")
           elsif @user == @round.data[:guesser]

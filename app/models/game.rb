@@ -43,19 +43,22 @@ class Game < ActiveRecord::Base
   def start
     start_time = Time.now
     active = true
+    waiting_for_players = false
     save
     # TODO: pusher
     
-    active_games = self.where(:active => true).find
-    stat = Stat.where(:key => :concurrent_active_games)
+    active_games = self.class.where(:active => true).all
+    stat = Stat.where(:key => :concurrent_active_games).first
+    stat = Stat.new(:key => :concurrent_active_games) unless stat
     if (stat.value < active_games.length)
       stat.value = active_games.length
       stat.save
       # TODO: pusher
     end
     
-    active_users = active_games.users.uniq!
-    stat = Stat.where(:key => :concurrent_active_users)
+    active_users = active_games.collect{|g|g.users}.flatten.uniq
+    stat = Stat.where(:key => :concurrent_active_users).first
+    stat = Stat.new(:key => :concurrent_active_users) unless stat
     if (stat.value < active_users.length)
       stat.value = active_users.length
       stat.save

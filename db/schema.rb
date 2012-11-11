@@ -15,11 +15,11 @@ ActiveRecord::Schema.define(:version => 20121111001929) do
 
   create_table "games", :force => true do |t|
     t.string   "phone_number"
-    t.boolean  "active"
+    t.boolean  "active",              :default => false
     t.datetime "start_time"
     t.datetime "end_time"
-    t.datetime "created_at",                            :null => false
-    t.datetime "updated_at",                            :null => false
+    t.datetime "created_at",                             :null => false
+    t.datetime "updated_at",                             :null => false
     t.boolean  "waiting_for_players", :default => true
   end
 
@@ -34,9 +34,9 @@ ActiveRecord::Schema.define(:version => 20121111001929) do
     t.text     "data"
     t.datetime "start_time"
     t.datetime "end_time"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-    t.boolean  "active"
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
+    t.boolean  "active",     :default => false
   end
 
   create_table "scores", :force => true do |t|
@@ -49,9 +49,9 @@ ActiveRecord::Schema.define(:version => 20121111001929) do
 
   create_table "stats", :force => true do |t|
     t.string   "key"
-    t.float    "value"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.float    "value",      :default => 0.0
+    t.datetime "created_at",                  :null => false
+    t.datetime "updated_at",                  :null => false
   end
 
   create_table "texts", :force => true do |t|
