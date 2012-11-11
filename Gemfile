@@ -16,6 +16,7 @@ gem 'SyslogLogger'
 gem 'uuid'
 gem 'haml-rails'
 gem 'twilio-ruby'
+gem 'randexp'
 
 # only needed for compiling assets, these gems will not be installed in production
 group :assets do

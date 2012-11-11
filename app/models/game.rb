@@ -8,20 +8,36 @@ class Game < ActiveRecord::Base
     rounds.where(:active => true).first
   end
   
-  def self.find_or_create(user)
-    match = where(:waiting_for_players => true).order('created_at DESC').first
-    
+  def self.find_active(user, phone)
+    match = where(:phone_number => phone, :active => true, :users => {:id => user}).joins(:users).first
     unless match
-      match = self.new
+      TwilioNumber.send_message("You do not have an active game for this number", user)
+    end
+    return match
+  end
+
+  def self.find_waiting_or_start(user)
+    matches = where(:waiting_for_players => true).order('created_at DESC').all
+    if matches.any?
+      users = matches.collect do |match|
+        match.users
+      end.flatten
+      if users.include? user
+        TwilioNumber.send_message("You are already waiting for a match.", user)
+        return
+      end
+      match = matches.first
+    else
+      best_number = self.get_least_used_number(user)
+      unless best_number
+        return
+      end
+      match = self.new :phone_number => best_number
     end
     
-    if match.users.include? user
-      false
-    else
-      match.users << user
-      match.save
-      match
-    end
+    match.users << user
+    match.save
+    return match
   end
   
   def start
@@ -51,5 +67,28 @@ class Game < ActiveRecord::Base
     end_time = Time.now
     active = false
     save
+  end
+
+  def self.get_least_used_number(user)
+    count = where(:active => true, :users => {:id => user.id}).joins(:users).count
+    if count > 2
+      TwilioNumber.send_message("You are already in the maximum number of games.", user)
+      return
+    end
+    sql = <<-SQL
+      SELECT `games`.*, count(*) AS cnt 
+      FROM `games` 
+      INNER JOIN `games_users` ON `games_users`.`game_id` = `games`.`id` 
+      INNER JOIN `users` ON `users`.`id` = `games_users`.`user_id` 
+      WHERE `games`.active = 1 AND (`users`.`id` != #{user.id}) 
+      GROUP BY `games`.phone_number 
+      ORDER BY cnt DESC;
+    SQL
+    results = find_by_sql(sql)
+    if results.any?
+      return results.first.phone_number
+    else
+      return TwilioNumber.first.phone_number
+    end
   end
 end

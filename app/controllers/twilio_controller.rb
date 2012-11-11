@@ -5,8 +5,7 @@ class TwilioController < ApplicationController
   end
 
   def main_sms
-    Rails.logger.ap(params)
-    
+    Text.main_rx(params[:From], params[:To], params[:Body])
   end
 
   def game_voice
@@ -14,7 +13,6 @@ class TwilioController < ApplicationController
   end
 
   def game_sms
-    Rails.logger.ap(params)
-    
+    Text.game_rx(params[:From], params[:To], params[:Body])
   end
 end

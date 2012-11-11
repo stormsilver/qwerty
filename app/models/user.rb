@@ -8,15 +8,14 @@ class User < ActiveRecord::Base
   	unless user
   		user = self.new(:phone_number => phone)
   		user.nickname = self.generate_nickname
-  		user.area_code = phone
-  		# user.save
-  		Rails.logger.ap(user)
+  		user.area_code = phone[2,3].to_i
+  		user.save
   	end
-  	
+
   	return user
   end
 
   def self.generate_nickname
-  	return "Awesome"
+  	return Randgen.name
   end
 end

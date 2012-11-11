@@ -13,6 +13,30 @@ task :add_twilio => :environment do
     {:phone_number => "8165699026", :twid => "PN67aa28312fd2982d20eb22b9c9159dd5"}
   ]
   numbers.each do |number|
-    twi = TwilioNumber.new(number)
+    TwilioNumber.create(number)
   end
+end
+
+task :main_rx => :environment do
+  from = ENV['from']
+  to = "+1" + ApplicationConfig['twilio_main_phone']
+  body = ENV['body']
+  if !from || !body
+    ap "You need to specify 'from' and and 'body'"
+    exit
+  end
+
+  Text.main_rx(from, to, body)
+end
+
+task :game_rx => :environment do
+  from = ENV['from']
+  to = ENV['to']
+  body = ENV['body']
+  if !from || !to || !body
+    ap "You need to specify 'from' and 'to' and 'body'"
+    exit
+  end
+
+  Text.game_rx(from, to, body)
 end
