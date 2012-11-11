@@ -80,7 +80,7 @@ class PushMaster
     'leaderboard-king' => Proc.new do
       kings = []
       ActiveRecord::Base.connection.select("SELECT `users`.area_code, (sum(`scores`.amount)/count(`rounds`.id)) AS score_sum FROM `users` LEFT JOIN `scores` ON `scores`.user_id = `users`.id LEFT JOIN `rounds` ON `rounds`.id = `scores`.round_id GROUP BY `users`.area_code ORDER BY score_sum DESC LIMIT 10").each do |leader|
-        kings << {:nick => "Area code #{leader['area_code']", :score => leader['score_sum'].to_f}
+        kings << {:nick => "Area code #{leader['area_code']}", :score => leader['score_sum'].to_f}
       end
       kings
     end
