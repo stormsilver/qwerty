@@ -11,15 +11,15 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121111001929) do
+ActiveRecord::Schema.define(:version => 20121111054512) do
 
   create_table "games", :force => true do |t|
     t.string   "phone_number"
-    t.boolean  "active",              :default => false
+    t.boolean  "active"
     t.datetime "start_time"
     t.datetime "end_time"
-    t.datetime "created_at",                             :null => false
-    t.datetime "updated_at",                             :null => false
+    t.datetime "created_at",                            :null => false
+    t.datetime "updated_at",                            :null => false
     t.boolean  "waiting_for_players", :default => true
   end
 
@@ -34,9 +34,9 @@ ActiveRecord::Schema.define(:version => 20121111001929) do
     t.text     "data"
     t.datetime "start_time"
     t.datetime "end_time"
-    t.datetime "created_at",                    :null => false
-    t.datetime "updated_at",                    :null => false
-    t.boolean  "active",     :default => false
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+    t.boolean  "active"
   end
 
   create_table "scores", :force => true do |t|
@@ -49,9 +49,9 @@ ActiveRecord::Schema.define(:version => 20121111001929) do
 
   create_table "stats", :force => true do |t|
     t.string   "key"
-    t.float    "value",      :default => 0.0
-    t.datetime "created_at",                  :null => false
-    t.datetime "updated_at",                  :null => false
+    t.float    "value"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "texts", :force => true do |t|
@@ -59,8 +59,9 @@ ActiveRecord::Schema.define(:version => 20121111001929) do
     t.integer  "user_id"
     t.integer  "round_id"
     t.integer  "game_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+    t.string   "body_original"
   end
 
   create_table "twilio_numbers", :force => true do |t|
@@ -74,8 +75,9 @@ ActiveRecord::Schema.define(:version => 20121111001929) do
     t.string   "phone_number"
     t.string   "nickname"
     t.integer  "area_code"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+    t.string   "body_original"
   end
 
 end

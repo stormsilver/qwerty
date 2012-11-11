@@ -4,7 +4,8 @@ class Text < ActiveRecord::Base
   belongs_to :user
 
   before_save do
-    self.body = self.body.strip.downcase
+    self.body_original = self.body.strip
+    self.body = self.body_original.downcase
   end
 
   def self.main_rx(from, to, body)
@@ -14,14 +15,10 @@ class Text < ActiveRecord::Base
       :user => user
     )
 
-    tmp = body.split(" ")
-    first_word = tmp.shift
-    rest_of_message = tmp.join(" ")
+    Rails.logger.ap("First Word: #{sms.first_word}")
+    Rails.logger.ap("Message: #{sms.second_word_on}");
 
-    Rails.logger.ap("First Word: #{first_word}")
-    Rails.logger.ap("Message: #{rest_of_message}");
-
-    case first_word.downcase
+    case sms.first_word
     when "start"
       game = Game.find_waiting_or_start(user)
       if game
@@ -29,11 +26,11 @@ class Text < ActiveRecord::Base
         provider.run
       end
     when "nick"
-      if not rest_of_message
+      if not sms.second_word_on
         TwilioNumber.send_message("You must specify name after the keyword NICK", user)
         return
       end
-      user.nickname = rest_of_message[0,16]
+      user.nickname = sms.second_word_on[0,16]
       user.save
       TwilioNumber.send_message("You will now be known as: #{user.nickname}", user)
     when "h"
@@ -63,6 +60,20 @@ class Text < ActiveRecord::Base
       provider = DungeonMaster::Master.provider_for game, user, sms
       provider.run
     end
+  end
+
+  def split_message
+    return self.body_original.split(" ")
+  end
+
+  def first_word
+    return split_message.shift
+  end
+
+  def second_word_on
+    tmp = split_message
+    tmp.shift
+    return tmp.join(" ")
   end
 
 end
