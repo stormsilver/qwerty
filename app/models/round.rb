@@ -5,15 +5,15 @@ class Round < ActiveRecord::Base
   serialize :data, Hash
   
   def start
-    start_time = Time.now
-    active = true
+    self.start_time = Time.now
+    self.active = true
     save
    # TODO: pusher
   end
   
   def stop
-    end_time = Time.now
-    active = false
+    self.end_time = Time.now
+    self.active = false
     save
     # TODO: pusher
   end

@@ -9,7 +9,7 @@ class Game < ActiveRecord::Base
   end
   
   def self.find_active(user, phone)
-    match = where(:phone_number => phone, :active => true, :users => {:id => user}).joins(:users).first
+    match = where(:phone_number => phone, :active => true, :users => {:id => user}).includes(:users).first
     unless match
       TwilioNumber.send_message("You do not have an active game for this number", user, nil, phone)
     end
@@ -41,9 +41,9 @@ class Game < ActiveRecord::Base
   end
   
   def start
-    start_time = Time.now
-    active = true
-    waiting_for_players = false
+    self.start_time = Time.now
+    self.active = true
+    self.waiting_for_players = false
     save
     # TODO: pusher
     
@@ -67,8 +67,8 @@ class Game < ActiveRecord::Base
   end
   
   def stop
-    end_time = Time.now
-    active = false
+    self.end_time = Time.now
+    self.active = false
     save
   end
 

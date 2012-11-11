@@ -25,7 +25,7 @@ class Text < ActiveRecord::Base
     when "start"
       game = Game.find_waiting_or_start(user)
       if game
-        provider = DungeonMaster::Master.provider_for game, user, body
+        provider = DungeonMaster::Master.provider_for game, user, sms
         provider.run
       end
     when "nick"
@@ -60,7 +60,7 @@ class Text < ActiveRecord::Base
     )
 
     if game
-      provider = DungeonMaster::Master.provider_for game, user, body
+      provider = DungeonMaster::Master.provider_for game, user, sms
       provider.run
     end
   end
