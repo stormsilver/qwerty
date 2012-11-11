@@ -26,8 +26,8 @@ class Text < ActiveRecord::Base
         provider.run
       end
     when "nick"
-      if not sms.second_word_on
-        TwilioNumber.send_message("You must specify name after the keyword NICK", user)
+      if sms.second_word_on.empty?
+        TwilioNumber.send_message("You are currently known as: #{user.nickname}.  Send 'NICK {new name}' to change nickname.", user)
         return
       end
       user.nickname = sms.second_word_on[0,16]
