@@ -132,9 +132,9 @@ $(function() {
 	  return result;
 	}
 	
-	window.buildLeaderboard = function(board, items) {
+	window.buildLeaderboard = function(board, items, places) {
 		var board = $("#" + board),
-			itemTemplate = $('<li class="item"><img /><span class="name"></span><span class="score"></span></li>');
+			itemTemplate = $('<li class="item"><img /><span class="name"></span><span class="score_hidden"></span><span class="score"></span></li>');
 			
 		for(var i = 0 ; i < items.length ; i++) {
 			//Check if user is already in list, if so, update their score
@@ -148,16 +148,15 @@ $(function() {
 				var max = 20;
 				// and the formula is:
 				var random = Math.floor(Math.random() * (max - min + 1)) + min;
-			
-			
 				var newItem = itemTemplate.clone();
 				newItem.find(".name").attr("nick", items[i].nick).text(items[i].nick);
-				newItem.find(".score").text(items[i].score);
+				newItem.find(".score").text((items[i].score).toFixed(places));
+				newItem.find(".score_hidden").text((items[i].score*100).toFixed(places));
 				newItem.find("img").attr("src", "/img/leader_avatar" + random + ".png");
 				board.isotope('insert', newItem);
 			}
 			
-			board.isotope({ sortBy : "score" });
+			board.isotope({ sortBy : "score_hidden", sortAscending: true });
 			board.css("height", "350px");
 		}
 	}
@@ -189,7 +188,10 @@ $(function() {
 	var myCounterGames = new flipCounter('flip-counter-games', {value: 0, auto: false, pace: 30});
 	var myCounterPlayers = new flipCounter('flip-counter-players', {value: 0, auto: false, pace: 30});
 	var myCounterSMS = new flipCounter('flip-counter-sms', {value: 0, auto: false, pace: 30});
-	
+	var playermax = 1;
+	var gamemax = 1;
+
+
 	$(".navbar").click(function() {
 	
 	myCounterGames.setPace(30);
@@ -225,17 +227,17 @@ $(function() {
 			$("#average-time-per-game").val(toHHMMSS(data.average)).css("font-size", "21px");
 		},
 		updateTopPlayers: function(data) {
-			buildLeaderboard("top10", data);
+			buildLeaderboard("top10", data, 0);
 		},
 		updateAceMasters: function(data) {
-			buildLeaderboard("ace", data);
+			buildLeaderboard("ace", data, 0);
 		},
 		updateKingOfTheHill: function(data) {
-			buildLeaderboard("kot", data);
+			buildLeaderboard("kot", data, 2);
 		},
 		updateCurrentPlayers: function(data) {
-			if (data.count > playermax) {
-				playermax = data.count;
+			if (data.record > playermax) {
+				playermax = data.record;
 			}		
 			
 			var deg = parseInt((data.count / playermax) * 130) + 24;
@@ -249,8 +251,8 @@ $(function() {
             $('#current-players-record').text(data.record);
 		},
 		updateCurrentGames: function(data) {
-			if (data.count > gamemax) {
-				gamemax = data.count;
+			if (data.record > gamemax) {
+				gamemax = data.record;
 			}		
 			
 			var deg = parseInt((data.count / gamemax) * 130) + 24;
@@ -261,6 +263,7 @@ $(function() {
                 easing: 'snap'
             });
 			
+
 			$("#current-games-count").text(data.count);
             $('#current-games-record').text(data.record);
 		}
@@ -306,12 +309,10 @@ $(function() {
 		page.updateKingOfTheHill(data);
 	});
 	
-	var playermax = 50;
 	channel.bind("current-players", function(data) {
 		page.updateCurrentPlayers(data);
 	});
 	
-	var gamemax = 25;
 	channel.bind("current-games", function(data) {
 		page.updateCurrentGames(data);
 	});

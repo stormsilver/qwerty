@@ -246,3 +246,7 @@
        -o-transition-duration: 0s;
           transition-duration: 0s;
 }
+
+.score_hidden {
+  display:none;
+}
