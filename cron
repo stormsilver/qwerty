@@ -1,0 +1,1 @@
+*/5 * * * * cd /Users/will/web/qwerty && bundle exec rake kill_old_games
