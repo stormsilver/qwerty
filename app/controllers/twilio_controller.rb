@@ -16,4 +16,15 @@ class TwilioController < ApplicationController
   def game_sms
     Text.game_rx(params[:From], params[:To], params[:Body])
   end
+
+  def fake
+    Rails.logger.ap(params);
+    if params[:To] == ApplicationConfig['twilio_main_phone']
+      Text.main_rx(params[:From], params[:To], params[:Body]) 
+    else
+      Text.game_rx(params[:From], params[:To], params[:Body])
+    end
+    Rails.logger.ap(params)
+    render :text => "hi"
+  end
 end

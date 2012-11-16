@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta charset="utf-8" />
+	<title>
+		Text With Friends
+	</title>
+	
+	<link rel="stylesheet" href="/css/flipcounter.css" type="text/css" />
+	<link rel="stylesheet"  href="/css/bootstrap.css" type="text/css" />
+	<link rel="stylesheet"  href="/css/bootstrap-responsive.css" type="text/css" />
+	<link rel="stylesheet"  href="/css/main.css" type="text/css" />
+	
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+	<script src="http://js.pusher.com/1.12/pusher.min.js"></script>
+</head>
+
+<style>
+	body {
+		padding: 10px;
+	}
+	h1 {
+		font-size: 30px;
+	}
+	table {
+		width:100%;
+	}
+
+	table td {
+		vertical-align: top;
+		padding:5px;
+		border-bottom:1px solid black;
+		border-right:1px solid black;
+	}
+</style>
+<body>
+<h1>Try out text with friends</h1>
+<div style="width:400px;height:300px;border:1px solid black;overflow:scroll;" id="scroll" cellpadding="2px">
+	<table id="log">
+		<tr><td style="vertical-align:top">From</td><td valign=top>Body</td></tr>
+	</table>
+</div>
+<div style="width:400px;height:100px">
+	<div style="width:250px;float:left;">
+		<select id="phone_select" style="width:100%">
+			<option value="+18166780040">(816) 678-0040</option>
+			<option value="+18162956925">(816) 295-6925</option>
+			<option value="+18169740624">(816) 974-0624</option>
+			<option value="+18165699026">(816) 569-9026</option>
+			<option value="+19136672961">(913) 667-2961</option>
+			<option value="+19136677041">(913) 667-7041</option>
+		</select>
+		<textarea id="text_body" style="width:240px;height:100px;"></textarea>
+	</div>
+	<div style="width:100px;float:left;padding: 30px 0 0 30px;">
+		<input type="button" id="send_button" value="Send" style="width:90px;height:90px;" />
+	</div>
+</div>
+
+
+<script>
+	var phone_name = "fake" + Math.floor(Math.random() * (1000000)) + 0;
+	var colors = {};
+	colors["+18166780040"] = "black";
+	colors["+18162956925"] = "red";
+	colors["+18169740624"] = "blue";
+	colors["+18165699026"] = "green";
+	colors["+19136672961"] = "magenta";
+	colors["+19136677041"] = "purple";
+
+	function post() {
+		$.ajax({
+			url: "/twilio/fake",
+			type: "POST",
+			data: {From:phone_name, To:$("#phone_select").val(), Body:$("#text_body").val()},
+			success: function(data) {
+			}
+		});
+	}
+
+	$("#send_button").click(function () {
+		post();
+	});
+
+	$(function() {		
+		var pusher = new Pusher('67c4cce54ab3421151c0');
+		var channel = pusher.subscribe('qwerty');
+		
+		channel.bind("get-sms-" + phone_name, function(data) {
+
+			$("#log tr:last").after("<tr><td style='vertical-align:top;margin:100px;color:" + colors[data.from] + "'>" + data.from + "</td><td style='color:" + colors[data.from] + "'>" + data.body + "</td></tr>");
+			var scroll = $('#scroll');
+			scroll.animate({ scrollTop: scroll.height() + 15 }, 1000);
+		});
+	});
+</script>
+	
+</body>
+</html>
