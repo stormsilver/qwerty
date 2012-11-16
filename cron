@@ -1,1 +1,1 @@
-*/5 * * * * cd /var/www; env RAILS_ENV=production VERBOSE=true bundle exec rake kill_old_games --trace
+*/5 * * * * cd /var/www; env RAILS_ENV=production VERBOSE=true /usr/local/bin/bundle exec rake kill_old_games --trace
