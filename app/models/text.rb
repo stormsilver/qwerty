@@ -29,7 +29,7 @@ class Text < ActiveRecord::Base
 
       if !player1 || !player2
         if is_new
-          TwilioNumber.send_message("We are now looking for and opponent for you", user)
+          TwilioNumber.send_message("We are now looking for an opponent for you", user)
         end
       else
         player1.queue_time = nil
