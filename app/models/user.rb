@@ -50,12 +50,11 @@
     else
       count = Game.get_game_count_for_user(self)
       if count > 2
-        TwilioNumber.send_message("You are already in the maximum number of games.", user)
+        TwilioNumber.send_message("You are already in the maximum number of games.", self)
         return
       end
       self.queue_time = Time.new
       self.save
-      TwilioNumber.send_message("We are now looking for and opponent for you", self)
       return true
     end
   end
