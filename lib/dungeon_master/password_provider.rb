@@ -23,6 +23,14 @@ module DungeonMaster
         users = @game.users
         initialize_round(users[0], users[1])
         @game.start
+        if users.length != 2 || users[0].id == users[1].id
+          Rails.logger.ap(users)
+          users.each do |user|
+            TwilioNumber.send_message("Game ERROR.  Please try again...", user, @game)
+          end
+          @game.stop
+          return
+        end
         @text.round = @round
       else
         handled = false

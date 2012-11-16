@@ -71,6 +71,8 @@ class Text < ActiveRecord::Base
     sms = self.create(:body => body, :user => user, :game => game)
 
     if game
+      game.last_text = sms.body
+      game.save
       provider = DungeonMaster::Master.provider_for game, user, sms
       provider.run
     end
