@@ -1,1 +1,1 @@
-*/5 * * * * cd /Users/will/web/qwerty && bundle exec rake kill_old_games
+*/5 * * * * cd /var/www && bundle exec rake kill_old_games
