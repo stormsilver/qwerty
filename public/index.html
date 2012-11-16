@@ -147,7 +147,8 @@ $(function() {
 			var existing = board.find("[nick='" + items[i].nick + "']").closest(".item");
 			
 			if (existing.length) {
-				existing.find(".score").text(items[i].score);
+				existing.find(".score").text((items[i].score).toFixed(places));
+				existing.find(".score_hidden").text((items[i].score*100).toFixed(places));
 				board.isotope('updateSortData', existing).isotope();
 			} else {
 				var min = 1;
