@@ -16,35 +16,31 @@ class Game < ActiveRecord::Base
     return match
   end
 
-  def self.find_waiting_or_start(user)
-    matches = where(:waiting_for_players => true).order('created_at DESC').all
-    if matches.any?
-      other_match = matches.find do |game|
-        !game.users.include? user
-      end
-      if other_match
-        match = other_match
-      else
-        users = matches.collect do |match|
-          match.users
-        end.flatten
-        if users.include? user
-          TwilioNumber.send_message("You are already waiting for a match.", user)
-          return
-        end
-        match = matches.first
-      end
-    else
-      best_number = self.get_least_used_number(user)
-      unless best_number
-        return
-      end
-      match = self.new :phone_number => best_number
+  def self.start_game(player1, player2)
+    best_number =  self.get_game_number(player1, player2)
+    if not best_number
+      TwilioNumber.send_message("No game rooms could be found.  Please try again later.", player1)
+      TwilioNumber.send_message("No game rooms could be found.  Please try again later.", player2)
+      return
     end
-    
-    match.users << user
+
+    match = self.new :phone_number => best_number
+    match.users << player1
+    match.users << player2
     match.save
     return match
+  end
+
+  def self.kill_old_games(verbose=false)
+    games = where(['active = 1 and updated_at < ?', DateTime.now - 15.minutes])
+    games.each do |game|
+      if verbose
+        game.users.each do |user|
+          TwilioNumber.send_message("This game of Text With Friends has been stopped due to lack of activity.", user)
+        end
+      end
+      game.stop
+    end
   end
   
   def start
@@ -68,38 +64,23 @@ class Game < ActiveRecord::Base
     PushMaster.generate_and_push('current-players')
   end
 
-  def self.get_least_used_number(user)
-    count = where(:active => true, :users => {:id => user.id}).joins(:users).count
-    if count > 2
-      TwilioNumber.send_message("You are already in the maximum number of games.", user)
-      return
-    end
-    
-    free_numbers_sql = <<-SQL
-    select t.phone_number as t_phone, g.phone_number as g_phone
-        from twilio_numbers as t
-        left outer join games as g on t.phone_number = g.phone_number and g.active = 1
-        where g.phone_number is null
-SQL
-    free_numbers = connection.select(free_numbers_sql)
-    if free_numbers.any?
-      return free_numbers.first["t_phone"]
-    end
-    
-    sql = <<-SQL
-      SELECT `games`.*, count(*) AS cnt 
-      FROM `games` 
-      INNER JOIN `games_users` ON `games_users`.`game_id` = `games`.`id` 
-      INNER JOIN `users` ON `users`.`id` = `games_users`.`user_id` 
-      WHERE `games`.active = 1 AND (`users`.`id` != #{user.id}) 
-      GROUP BY `games`.phone_number 
-      ORDER BY cnt DESC;
-    SQL
-    results = find_by_sql(sql)
-    if results.any?
-      return results.first.phone_number
-    else
-      return TwilioNumber.first.phone_number
+  def self.get_game_count_for_user(user)
+    return where(:active => true, :users => {:id => user.id}).joins(:users).count
+  end
+
+  def self.get_game_number(player1, player2)
+    TwilioNumber.get_numbers.each do |number|
+      count_sql = <<-SQL
+        select count(*) as count
+          from games as g
+          join games_users as gu on g.id = gu.game_id
+          where g.active = 1 and g.phone_number = '#{number}' and gu.user_id in (#{player1.id}, #{player2.id})
+          order by game_id
+      SQL
+      count = connection.select(count_sql).first['count']
+      if count == 0
+        return number
+      end
     end
   end
 end

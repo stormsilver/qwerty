@@ -7,7 +7,7 @@ class Text < ActiveRecord::Base
     self.body_original = self.body.strip
     self.body = self.body_original.downcase
   end
-  
+      
   after_create do
     PushMaster.generate_and_push('sms-count')
   end
@@ -20,12 +20,26 @@ class Text < ActiveRecord::Base
     )
 
     Rails.logger.ap("First Word: #{sms.first_word}")
-    Rails.logger.ap("Message: #{sms.second_word_on}");
+    Rails.logger.ap("Message: #{sms.second_word_on}")
 
     case sms.first_word
     when "start"
-      game = Game.find_waiting_or_start(user)
-      if game
+      is_new = user.queue
+      player1, player2 = User.find_next_two_waiting_users
+
+      if !player1 || !player2
+        if is_new
+          TwilioNumber.send_message("We are now looking for and opponent for you", user)
+        end
+      else
+        player1.queue_time = nil
+        player2.queue_time = nil
+        player1.save
+        player2.save
+        game = Game.start_game(player1, player2)
+        if !game
+          return
+        end
         provider = DungeonMaster::Master.provider_for game, user, sms
         provider.run
       end

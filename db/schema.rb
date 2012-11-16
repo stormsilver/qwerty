@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121111054512) do
+ActiveRecord::Schema.define(:version => 20121115201402) do
 
   create_table "games", :force => true do |t|
     t.string   "phone_number"
@@ -77,6 +77,9 @@ ActiveRecord::Schema.define(:version => 20121111054512) do
     t.integer  "area_code"
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
+    t.datetime "queue_time"
   end
+
+  add_index "users", ["queue_time"], :name => "index_users_on_queue_time"
 
 end
