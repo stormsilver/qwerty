@@ -36,7 +36,7 @@ class Game < ActiveRecord::Base
     games.each do |game|
       if verbose
         game.users.each do |user|
-          TwilioNumber.send_message("This game of Text With Friends has been stopped due to lack of activity.", user)
+          TwilioNumber.send_message("This game of Text With Friends has been stopped due to lack of activity.", user, game)
         end
       end
       game.stop
